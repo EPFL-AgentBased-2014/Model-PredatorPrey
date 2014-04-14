@@ -211,7 +211,7 @@ INPUTBOX
 845
 179
 gamma
-0.06
+0.04
 1
 0
 Number
@@ -279,7 +279,7 @@ INPUTBOX
 194
 77
 init-rabbits
-60
+90
 1
 0
 Number
@@ -290,7 +290,7 @@ INPUTBOX
 194
 145
 init-foxes
-100
+30
 1
 0
 Number
