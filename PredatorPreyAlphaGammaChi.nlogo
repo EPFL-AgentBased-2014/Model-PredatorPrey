@@ -221,7 +221,7 @@ PLOT
 72
 1210
 326
-plot 1
+Populations
 NIL
 NIL
 0.0
@@ -279,7 +279,7 @@ INPUTBOX
 194
 77
 init-rabbits
-90
+50
 1
 0
 Number
@@ -290,7 +290,7 @@ INPUTBOX
 194
 145
 init-foxes
-30
+40
 1
 0
 Number
@@ -298,7 +298,7 @@ Number
 @#$#@#$#@
 ## WHAT IS IT?
 
-(a general understanding of what the model is trying to show or explain)
+A predator-prey model where beta (prey death rate) and delta (predator reproduction rate) are replaced by a spatial parameter chi.
 
 ## HOW IT WORKS
 
@@ -306,7 +306,11 @@ Number
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+Most stable parameters:
+alpha		0.02
+gamma		0.04
+init-rabbits	50
+init-foxes	40
 
 ## THINGS TO NOTICE
 
