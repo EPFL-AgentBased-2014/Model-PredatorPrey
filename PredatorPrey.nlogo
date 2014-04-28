@@ -7,18 +7,24 @@ to setup
   clear-all
   reset-ticks
   ask patches [set pcolor green]
-  
+  make-rabbits init-rabbits
+  make-foxes init-foxes
+end
+
+to make-rabbits [#n]
   ;;Create rabbits and initialize variables
   set-default-shape rabbits "rabbit"
-  create-rabbits init-rabbits
+  create-rabbits #n
   [
     set-r
     setxy random-xcor random-ycor
     ]
-  
+end
+
+to make-foxes [#n]
   ;;Create foxes and initialize variables
   set-default-shape foxes "fox"
-  create-foxes init-foxes
+  create-foxes #n
   [
     set-f
     setxy random-xcor random-ycor
@@ -41,11 +47,27 @@ to go
   ]
   
   ;;Rabbits procedures
-  ask rabbits [
-    reproduce-r
-  ]
+  ifelse grass-effect? [
+    ask rabbits [
+      reproduce-r-grass
+      ]
+    ] [
+    ask rabbits [
+      reproduce-r
+      ]
+    ]
 
   tick
+end
+
+to draw-grass
+  let erasing? [pcolor = green] of patch mouse-xcor mouse-ycor
+  while [mouse-down?]
+    [ ask patch mouse-xcor mouse-ycor
+      [ ifelse erasing?
+        [ set pcolor black ]
+        [ set pcolor green ] ]
+      display ]
 end
 
 ;;TURTLES PROCEDURES
@@ -71,6 +93,19 @@ to reproduce-r
     ]
 end
 
+to reproduce-r-grass
+  ;; Variable i is a random number from 0 to 1
+  let alpha-grass alpha
+  if [pcolor] of patch-here = green [
+    set alpha-grass (alpha * grass-effect)
+    ]
+  let i random-float 1
+  if i < alpha-grass [
+    hatch 1 [set-r]
+    ]
+end
+
+
 ;;FOXES PROCEDURES
 
 to set-f
@@ -87,11 +122,17 @@ end
 
 to hunt
   if any? rabbits-here [
-    ask one-of rabbits-here [
-      die
+    let j random-float 1
+    if j < beta [
+      ask one-of rabbits-here [
+        die
+        ]
+      let i random-float 1
+      if i < delta [
+        hatch 1 [set-f]
       ]
-    hatch 1 [set-f]
     ]
+  ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -174,9 +215,9 @@ NIL
 
 INPUTBOX
 690
-36
+74
 845
-96
+134
 alpha
 0.02
 1
@@ -207,9 +248,9 @@ count foxes
 
 INPUTBOX
 690
-119
+157
 845
-179
+217
 gamma
 0.04
 1
@@ -221,7 +262,7 @@ PLOT
 72
 1210
 326
-plot 1
+Populations
 NIL
 NIL
 0.0
@@ -229,11 +270,11 @@ NIL
 0.0
 10.0
 true
-false
+true
 "" ""
 PENS
-"default" 1.0 0 -955883 true "" "plot count foxes"
-"pen-1" 1.0 0 -12895429 true "" "plot count rabbits"
+"foxes" 1.0 0 -955883 true "" "plot count foxes"
+"rabbits" 1.0 0 -12895429 true "" "plot count rabbits"
 
 PLOT
 863
@@ -255,9 +296,9 @@ PENS
 
 TEXTBOX
 690
-18
+56
 840
-36
+74
 Rabbit reproduction rate
 11
 0.0
@@ -265,9 +306,9 @@ Rabbit reproduction rate
 
 TEXTBOX
 692
-101
+139
 842
-119
+157
 Fox mortality rate
 11
 0.0
@@ -279,7 +320,7 @@ INPUTBOX
 194
 77
 init-rabbits
-90
+50
 1
 0
 Number
@@ -290,10 +331,111 @@ INPUTBOX
 194
 145
 init-foxes
-30
+40
 1
 0
 Number
+
+TEXTBOX
+690
+241
+853
+271
+Space dependent variables
+12
+0.0
+1
+
+INPUTBOX
+689
+283
+843
+343
+delta
+1
+1
+0
+Number
+
+TEXTBOX
+690
+263
+840
+281
+Fox reproduction rate\n
+11
+0.0
+1
+
+TEXTBOX
+690
+18
+840
+48
+Space independent variables
+12
+0.0
+1
+
+SWITCH
+23
+160
+194
+193
+grass-effect?
+grass-effect?
+0
+1
+-1000
+
+INPUTBOX
+690
+488
+845
+548
+grass-effect
+1.1
+1
+0
+Number
+
+TEXTBOX
+690
+352
+840
+370
+Rabbit mortality rate
+11
+0.0
+1
+
+INPUTBOX
+688
+369
+843
+429
+beta
+1
+1
+0
+Number
+
+BUTTON
+26
+208
+129
+241
+NIL
+draw-grass
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -655,15 +797,16 @@ NetLogo 5.0.5
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="find_cyles" repetitions="10" runMetricsEveryStep="false">
+  <experiment name="find_cyles_alphagammadelta" repetitions="10" runMetricsEveryStep="false">
     <setup>setup</setup>
     <go>go</go>
-    <timeLimit steps="2000"/>
+    <timeLimit steps="10000"/>
     <exitCondition>not any? rabbits or not any? foxes</exitCondition>
     <metric>count rabbits</metric>
     <metric>count foxes</metric>
     <steppedValueSet variable="alpha" first="0.01" step="0.01" last="0.1"/>
     <steppedValueSet variable="gamma" first="0.01" step="0.01" last="0.2"/>
+    <steppedValueSet variable="delta" first="0.1" step="0.1" last="1"/>
     <steppedValueSet variable="init-rabbits" first="10" step="10" last="100"/>
     <steppedValueSet variable="init-foxes" first="10" step="10" last="100"/>
   </experiment>
