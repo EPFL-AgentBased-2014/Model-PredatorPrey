@@ -2,6 +2,10 @@
 breed [rabbits rabbit]
 breed [foxes fox]
 
+patches-own [
+  eaten
+  ]
+
 ;;OBSERVER PROCEDURES
 to setup
   clear-all
@@ -50,11 +54,19 @@ to go
   ifelse grass-effect? [
     ask rabbits [
       reproduce-r-grass
+      if eat-grass? [
+        eat-grass
+        ]
       ]
     ] [
     ask rabbits [
       reproduce-r
       ]
+    ]
+
+  ;;Grass procedures
+  ask patches [
+    grow
     ]
 
   tick
@@ -70,6 +82,18 @@ to draw-grass
       display ]
 end
 
+;;PATCHES PROCEDURES
+
+to grow
+  if pcolor = black [
+    set eaten eaten + 1
+    ]
+  if eaten >= grow-time [
+    set eaten 0
+    set pcolor green
+  ]
+end
+
 ;;TURTLES PROCEDURES
 
 to move
@@ -83,6 +107,12 @@ end
 to set-r
   set color white
   set size 1.5
+end
+
+to eat-grass
+  ask patch-here [
+    set pcolor black
+    ]
 end
 
 to reproduce-r
@@ -275,6 +305,7 @@ true
 PENS
 "foxes" 1.0 0 -955883 true "" "plot count foxes"
 "rabbits" 1.0 0 -12895429 true "" "plot count rabbits"
+"grass / 8" 1.0 0 -10899396 true "" "plot count patches with [pcolor = green] / 8"
 
 PLOT
 863
@@ -282,8 +313,8 @@ PLOT
 1209
 600
 Phase Space
-NIL
-NIL
+rabbits
+foxes
 0.0
 10.0
 0.0
@@ -436,6 +467,28 @@ NIL
 NIL
 NIL
 1
+
+SWITCH
+21
+268
+193
+301
+eat-grass?
+eat-grass?
+0
+1
+-1000
+
+INPUTBOX
+19
+309
+194
+369
+grow-time
+10
+1
+0
+Number
 
 @#$#@#$#@
 ## WHAT IS IT?
