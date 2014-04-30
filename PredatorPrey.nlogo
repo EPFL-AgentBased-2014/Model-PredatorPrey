@@ -415,7 +415,7 @@ SWITCH
 193
 grass-effect?
 grass-effect?
-0
+1
 1
 -1000
 
@@ -475,7 +475,7 @@ SWITCH
 301
 eat-grass?
 eat-grass?
-0
+1
 1
 -1000
 
@@ -850,7 +850,7 @@ NetLogo 5.0.5
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="find_cyles_alphagammadelta" repetitions="10" runMetricsEveryStep="false">
+  <experiment name="find_cyles" repetitions="10" runMetricsEveryStep="false">
     <setup>setup</setup>
     <go>go</go>
     <timeLimit steps="10000"/>
@@ -859,7 +859,6 @@ NetLogo 5.0.5
     <metric>count foxes</metric>
     <steppedValueSet variable="alpha" first="0.01" step="0.01" last="0.1"/>
     <steppedValueSet variable="gamma" first="0.01" step="0.01" last="0.2"/>
-    <steppedValueSet variable="delta" first="0.1" step="0.1" last="1"/>
     <steppedValueSet variable="init-rabbits" first="10" step="10" last="100"/>
     <steppedValueSet variable="init-foxes" first="10" step="10" last="100"/>
   </experiment>
